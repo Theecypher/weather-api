@@ -2,39 +2,45 @@ const express = require("express");
 const app = express();
 const env = require("dotenv").config();
 const port = process.env.PORT || 2200;
-const apiKey = process.env.API_KEY
-const axios = require("axios")
+const apiKey = process.env.API_KEY;
+const axios = require("axios");
+const http = require("http");
+const geoip = require("fast-geoip");
 
-// const do = () => {}
+app.use(express.json());
 
-app.get('/api/hello', async (req, res) => {
-    const visitorName = req.query.visitor_name || 'Guest';
-    const client = req.query['x-foward-for'] || req.connection.remoteAddress;
+app.get("/", async (req, res) => {
+  res.status(200).send("This is the free weather api!.");
+});
 
+app.get("/api/hello", async (req, res) => {
+  const visitor_name = req.query.visitor_name || "Guest";
+  const ip = req.headers["x-forwarded-for"] || "41.203.78.171";
 
-    try {
-        const locationRes = await axios.get(`http://ip-api.com/json/${client}`)
-        const location = locationRes.data.city || "Unknown location"
-
-        const weatherRes = await axios.get(`https://api.tomorrow.io/v4/weather/forecast?location=42.3478,-71.0466&${apiKey}`)
-        const temperature = weatherRes.data.current.temperature
-
-        res.json({
-            client,
-            location: `${location}`,
-            greeting: `Hello, ${visitorName}!, the temperature is ${temperature} degrees Celsius in ${location}`
-        })
-    }
-
-    catch (error) {
-        res.status(500).send("Internal server error!")
-    }
-})
-
-
-
-
-app.listen(port, () => {
-    console.log(`app is listening on http://localhost${port}`);
-  });
   
+  
+  try {
+      const geo = await geoip.lookup(ip);
+      const location = geo.city
+   
+
+    const weatherRes = await axios.get(
+      `https://api.tomorrow.io/v4/weather/realtime?location=Lagos&apikey=${apiKey}`
+    );
+    const temperature = weatherRes.data.data.values.temperature;
+
+    res.json({
+      // client_ip: clientIp,
+      location: `${location}`,
+      greeting: `Hello, ${visitor_name}!, the temperature is ${temperature} degrees Celsius in ${location}`,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send("Internal server errors!");
+  }
+});
+
+const server = http.createServer(app);
+server.listen(port, () => {
+  console.log(`Server is listening on port ${port}`);
+});
