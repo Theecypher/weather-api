@@ -14,23 +14,23 @@ app.get("/", async (req, res) => {
 });
 
 app.get("/api/hello", async (req, res) => {
-  const visitor_name = req.query.visitor_name || "Guest";
-  const ip = req.headers["x-forwarded-for"] || "41.203.78.171";
+  const visitor_name = req.query.visitor_name;
+  const ClientIp = req.headers["x-forwarded-for"] || "41.203.78.171";
 
   
   
   try {
-      const geo = await geoip.lookup(ip);
+      const geo = await geoip.lookup(ClientIp);
       const location = geo.city
    
-
     const weatherRes = await axios.get(
       `https://api.tomorrow.io/v4/weather/realtime?location=Lagos&apikey=${apiKey}`
     );
-    const temperature = weatherRes.data.data.values.temperature;
+    const temperature = weatherRes.data.data.values.temperature || 11;
+    // const temperature = 11;
 
     res.json({
-      // client_ip: clientIp,
+      client_ip: ClientIp,
       location: `${location}`,
       greeting: `Hello, ${visitor_name}!, the temperature is ${temperature} degrees Celsius in ${location}`,
     });
