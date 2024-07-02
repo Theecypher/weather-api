@@ -23,11 +23,11 @@ app.get("/api/hello", async (req, res) => {
       const geo = await geoip.lookup(ClientIp);
       const location = geo.city
    
-    const weatherRes = await axios.get(
-      `https://api.tomorrow.io/v4/weather/realtime?location=Lagos&apikey=${apiKey}`
-    );
-    const temperature = weatherRes.data.data.values.temperature || 11;
-    // const temperature = 11;
+    // const weatherRes = await axios.get(
+    //   `https://api.tomorrow.io/v4/weather/realtime?location=Lagos&apikey=${apiKey}`
+    // );
+    // const temperature = weatherRes.data.data.values.temperature || 11;
+    const temperature = 11;
 
     res.json({
       client_ip: ClientIp,
