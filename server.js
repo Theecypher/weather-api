@@ -24,7 +24,7 @@ app.get("/api/hello", async (req, res) => {
       const location = geo.city
    
     // const weatherRes = await axios.get(
-    //   `https://api.tomorrow.io/v4/weather/realtime?location=Lagos&apikey=${apiKey}`
+    //   `https://api.tomorrow.io/v4/weather/realtime?location=${location}&apikey=${apiKey}`
     // );
     // const temperature = weatherRes.data.data.values.temperature || 11;
     const temperature = 11;
