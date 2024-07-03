@@ -13,7 +13,19 @@ app.get("/", async (req, res) => {
   res.status(200).send("This is the free weather api!.");
 });
 
-const server = http.createServer(app);
-server.listen(port, () => {
+app.get("/api/hello", async (req, res) => {
+  try {
+    res.json({
+        name: "Mma",
+        status: "O ti su mi"
+    });
+  } catch (error) { 
+    console.log(error);
+    res.status(500).send("Internal server error!")
+  }
+});
+
+// const server = http.createServer(app);
+app.listen(port, () => {
   console.log(`Server is listening on port ${port}`);
 });
