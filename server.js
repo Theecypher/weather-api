@@ -24,10 +24,9 @@ app.get("/api/hello", async (req, res) => {
       `https://api.tomorrow.io/v4/weather/realtime?location=${location}&apikey=${apiKey}`
     );
     const temperature = weatherRes.data.data.values.temperature || 11;
-    // const temperature = 11;
 
     res.json({
-      client_ip: ClientIp,
+      ip: ClientIp,
       location: `${location}`,
       greeting: `Hello, ${visitor_name}!, the temperature is ${temperature} degrees Celsius in ${location}`,
     });
