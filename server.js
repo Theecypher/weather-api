@@ -15,8 +15,6 @@ app.get("/", async (req, res) => {
 app.get("/api/hello", async (req, res) => {
   const visitor_name = req.query.visitor_name;
   const ClientIp = req.headers["x-forwarded-for"] || "41.203.78.171";
-
-  
   
   try {
       const geo = await geoip.lookup(ClientIp);
@@ -43,3 +41,5 @@ app.get("/api/hello", async (req, res) => {
 app.listen(port, () => {
   console.log(`Server is listening on port ${port}`);
 });
+
+module.exports = app
